@@ -1,10 +1,8 @@
-import 'package:cars_colletion/model/connectionMongoDB.dart';
-import 'package:cars_colletion/view/showData.dart';
+import 'package:cars_colletion/view/showCars.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await ConnectionMongoDB.connect();
   runApp(const MyApp());
 }
 
@@ -19,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ShowData(),
+      home: const ShowCars(),
     );
   }
 }
