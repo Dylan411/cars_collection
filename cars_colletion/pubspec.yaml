@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   mongo_dart: ^0.8.2
   favorite_button: ^0.0.4
+  shared_preferences: ^0.5.5
 
 dev_dependencies:
   flutter_test:

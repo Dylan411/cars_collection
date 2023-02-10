@@ -57,6 +57,20 @@ class Api {
     }
   }
 
+  Future<int?> login(String user, String pass) async {
+    var url = Uri.parse("${baseUrl}user/login/$user/$pass");
+
+    try {
+      final res = await http.get(url);
+      print(res.statusCode);
+      print(url);
+      return res.statusCode;
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
   static searchCar(car) async {
     var url = Uri.parse("${baseUrl}car/getCarsByModel/$car");
 

@@ -16,6 +16,7 @@ class _ShowCarsState extends State<ShowCars> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('Cars'),
         actions: [
           IconButton(
