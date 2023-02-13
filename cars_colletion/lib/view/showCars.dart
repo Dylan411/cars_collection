@@ -1,17 +1,34 @@
 import 'package:cars_colletion/model/cars.dart';
 import 'package:cars_colletion/service/carAPI.dart';
+import 'package:cars_colletion/view/login.dart';
 import 'package:cars_colletion/view/searchCars.dart';
-import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ShowCars extends StatefulWidget {
-  const ShowCars({super.key});
+  final String name;
+
+  const ShowCars({Key? key, required this.name}) : super(key: key);
 
   @override
   State<ShowCars> createState() => _ShowCarsState();
 }
 
 class _ShowCarsState extends State<ShowCars> {
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  void loadData() async {
+    SharedPreferences name = await SharedPreferences.getInstance();
+    setState(() {
+      print('userInit:' + name.getString('user'));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,16 +68,32 @@ class _ShowCarsState extends State<ShowCars> {
                             itemCount: data.length,
                             itemBuilder: (BuildContext context, index) {
                               return ListTile(
-                                leading: Icon(Icons.storage),
-                                title: Text(data[index].modelName),
-                                subtitle: Text(data[index].brand),
-                                trailing: FavoriteButton(
-                                  isFavorite: false,
-                                  valueChanged: (_isFavorite) {
-                                    Api.insertCar(data[index].id);
-                                  },
-                                ),
-                              );
+                                  leading: Icon(Icons.storage),
+                                  title: Text(data[index].modelName),
+                                  subtitle: Text(data[index].brand),
+                                  trailing: IconButton(
+                                      onPressed: () async {
+                                        SharedPreferences name =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        if (name == '') {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: ((context) =>
+                                                      Login())));
+                                        } else {
+                                          QuickAlert.show(
+                                              context: context,
+                                              type: QuickAlertType.success,
+                                              text:
+                                                  '${data[index].modelName} ha sido añadido a su colección');
+                                          name.setString('name', widget.name);
+                                          Api.insertCar(data[index].id);
+                                        }
+                                      },
+                                      icon: const Icon(
+                                          Icons.add_circle_outline_outlined)));
                             },
                           );
                         }

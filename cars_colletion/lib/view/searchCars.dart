@@ -1,8 +1,7 @@
-import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
-
 import '../model/cars.dart';
 import '../service/carAPI.dart';
+import 'login.dart';
 
 class SearchCar extends SearchDelegate {
   @override
@@ -54,16 +53,23 @@ class SearchCar extends SearchDelegate {
                           itemCount: data.length,
                           itemBuilder: (BuildContext context, index) {
                             return ListTile(
-                              leading: Icon(Icons.storage),
-                              title: Text(data[index].modelName),
-                              subtitle: Text(data[index].brand),
-                              trailing: FavoriteButton(
-                                isFavorite: false,
-                                valueChanged: (_isFavorite) {
-                                  Api.insertCar(data[index].id);
-                                },
-                              ),
-                            );
+                                leading: Icon(Icons.storage),
+                                title: Text(data[index].modelName),
+                                subtitle: Text(data[index].brand),
+                                trailing: IconButton(
+                                    onPressed: () {
+                                      if (1 == '') {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: ((context) =>
+                                                    Login())));
+                                      } else {
+                                        Api.insertCar(data[index].id);
+                                      }
+                                    },
+                                    icon: const Icon(
+                                        Icons.add_circle_outline_outlined)));
                           },
                         );
                       }

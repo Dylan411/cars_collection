@@ -100,8 +100,11 @@ class _LoginState extends State<Login> {
                     user.setString('user', nameController.text);
                     password.setString('password', passwordController.text);
                   });
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: ((context) => ShowCars())));
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) =>
+                              ShowCars(name: user.getString('user')))));
                 }
               },
             )),
