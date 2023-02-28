@@ -1,21 +1,21 @@
 import 'package:cars_colletion/model/cars.dart';
 import 'package:cars_colletion/service/carAPI.dart';
-import 'package:cars_colletion/view/login.dart';
-import 'package:cars_colletion/view/searchCars.dart';
+import 'package:cars_colletion/view/user/accessUser.dart';
+import 'package:cars_colletion/view/user/login.dart';
+import 'package:cars_colletion/view/car/searchCars.dart';
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ShowCars extends StatefulWidget {
-  final String name;
-
-  const ShowCars({Key? key, required this.name}) : super(key: key);
+  const ShowCars({Key? key}) : super(key: key);
 
   @override
   State<ShowCars> createState() => _ShowCarsState();
 }
 
 class _ShowCarsState extends State<ShowCars> {
+  String user = 'DLN';
   @override
   void initState() {
     super.initState();
@@ -25,7 +25,8 @@ class _ShowCarsState extends State<ShowCars> {
   void loadData() async {
     SharedPreferences name = await SharedPreferences.getInstance();
     setState(() {
-      print('userInit:' + name.getString('user'));
+      user = name.getString('user')!;
+      print('userInit:' + user);
     });
   }
 
@@ -34,13 +35,13 @@ class _ShowCarsState extends State<ShowCars> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Cars'),
+        title: const Text('Cars'),
         actions: [
           IconButton(
               onPressed: () {
-                showSearch(context: context, delegate: SearchCar());
+                showSearch(context: context, delegate: SearchCar(user: user));
               },
-              icon: Icon(Icons.search))
+              icon: const Icon(Icons.search))
         ],
       ),
       body: SafeArea(
@@ -68,28 +69,28 @@ class _ShowCarsState extends State<ShowCars> {
                             itemCount: data.length,
                             itemBuilder: (BuildContext context, index) {
                               return ListTile(
-                                  leading: Icon(Icons.storage),
+                                  leading: Image.network(
+                                    data[index].image,
+                                    height: 90,
+                                    width: 90,
+                                  ),
                                   title: Text(data[index].modelName),
                                   subtitle: Text(data[index].brand),
                                   trailing: IconButton(
                                       onPressed: () async {
-                                        SharedPreferences name =
-                                            await SharedPreferences
-                                                .getInstance();
-                                        if (name == '') {
+                                        if (user == ' ') {
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: ((context) =>
-                                                      Login())));
+                                                      AccessUser())));
                                         } else {
                                           QuickAlert.show(
                                               context: context,
                                               type: QuickAlertType.success,
                                               text:
                                                   '${data[index].modelName} ha sido añadido a su colección');
-                                          name.setString('name', widget.name);
-                                          Api.insertCar(data[index].id);
+                                          Api.insertCar(user, data[index].id);
                                         }
                                       },
                                       icon: const Icon(

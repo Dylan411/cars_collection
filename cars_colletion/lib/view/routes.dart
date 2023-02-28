@@ -1,5 +1,6 @@
-import 'package:cars_colletion/view/login.dart';
-import 'package:cars_colletion/view/showCars.dart';
+import 'package:cars_colletion/view/user/account.dart';
+import 'package:cars_colletion/view/car/showCars.dart';
+import 'package:cars_colletion/view/car/showCarsCollection.dart';
 import 'package:flutter/cupertino.dart';
 
 class Routes extends StatelessWidget {
@@ -8,7 +9,7 @@ class Routes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> myList = [const Login(), const ShowCars(name: '')];
+    List<Widget> myList = [ShowCars(), Account(), CarsCollection()];
     return myList[index];
   }
 }

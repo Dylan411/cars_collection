@@ -33,20 +33,12 @@ class _NavbarState extends State<Navbar> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Home',
+            icon: Icon(Icons.car_rental),
+            label: 'My Cars',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.lightbulb_outline),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Home',
+            icon: Icon(Icons.account_box),
+            label: 'Account',
           ),
         ]);
   }

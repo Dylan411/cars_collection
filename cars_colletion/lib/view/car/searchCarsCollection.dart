@@ -1,9 +1,19 @@
+import 'package:cars_colletion/view/user/accessUser.dart';
 import 'package:flutter/material.dart';
-import '../model/cars.dart';
-import '../service/carAPI.dart';
-import 'login.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../model/cars.dart';
+import '../../service/carAPI.dart';
+import '../user/login.dart';
 
-class SearchCar extends SearchDelegate {
+class SearchCarCollection extends SearchDelegate {
+  SearchCarCollection({
+    @required this.user,
+  });
+
+  final user;
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -36,7 +46,7 @@ class SearchCar extends SearchDelegate {
           ),
           Expanded(
               child: FutureBuilder(
-                  future: Api.getCar(query: query),
+                  future: Api.getCarsCollection(query: query, user: user),
                   builder: (context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(
@@ -53,7 +63,11 @@ class SearchCar extends SearchDelegate {
                           itemCount: data.length,
                           itemBuilder: (BuildContext context, index) {
                             return ListTile(
-                                leading: Icon(Icons.storage),
+                                leading: Image.network(
+                                  data[index].image,
+                                  height: 90,
+                                  width: 90,
+                                ),
                                 title: Text(data[index].modelName),
                                 subtitle: Text(data[index].brand),
                                 trailing: IconButton(
@@ -63,13 +77,35 @@ class SearchCar extends SearchDelegate {
                                             context,
                                             MaterialPageRoute(
                                                 builder: ((context) =>
-                                                    Login())));
+                                                    AccessUser())));
                                       } else {
-                                        Api.insertCar(data[index].id);
+                                        QuickAlert.show(
+                                          context: context,
+                                          type: QuickAlertType.confirm,
+                                          text:
+                                              'Esta seguro que desea borrar ${data[index].modelName} de su coleccion',
+                                          confirmBtnText: 'Si',
+                                          cancelBtnText: 'No',
+                                          confirmBtnColor: Colors.white,
+                                          backgroundColor: Colors.black,
+                                          confirmBtnTextStyle: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          barrierColor: Colors.white,
+                                          titleColor: Colors.white,
+                                          textColor: Colors.white,
+                                          onConfirmBtnTap: () {
+                                            Api.deleteCar(user, data[index].id);
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pop();
+                                          },
+                                        );
                                       }
                                     },
                                     icon: const Icon(
-                                        Icons.add_circle_outline_outlined)));
+                                        Icons.remove_circle_outline_outlined)));
                           },
                         );
                       }
