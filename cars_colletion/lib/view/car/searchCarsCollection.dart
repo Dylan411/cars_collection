@@ -72,7 +72,7 @@ class SearchCarCollection extends SearchDelegate {
                                 subtitle: Text(data[index].brand),
                                 trailing: IconButton(
                                     onPressed: () {
-                                      if (1 == '') {
+                                      if (user == null) {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(

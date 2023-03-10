@@ -4,14 +4,30 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static const baseUrl = "http://10.0.2.2:4002/api/";
+  static const baseUrl =
+      "https://carcollectionapi-production.up.railway.app/api/";
+  static const backUpUrl = "https://wild-lime-capybara-hat.cyclic.app/api/";
+
+  static String url = '';
+
+  static void verify() async {
+    try {
+      var testUrl = Uri.parse(baseUrl);
+      final res = await http.get(testUrl);
+      url = baseUrl;
+    } catch (e) {
+      url = backUpUrl;
+    }
+  }
 
   static getCar({String? query}) async {
+    verify();
     List<Cars> listCars = [];
 
-    var url = Uri.parse("${baseUrl}car");
+    var testUrl = Uri.parse("${url}car");
+    print(url);
     try {
-      final res = await http.get(url);
+      final res = await http.get(testUrl);
 
       print(res.statusCode);
 
@@ -47,11 +63,12 @@ class Api {
   }
 
   static getCarsCollection({String? query, required String user}) async {
+    verify();
     List<Cars> listCars = [];
 
-    var url = Uri.parse("${baseUrl}car/getCarsById/$user");
+    var testUrl = Uri.parse("${url}car/getCarsById/$user");
     try {
-      final res = await http.get(url);
+      final res = await http.get(testUrl);
 
       print(res.statusCode);
 
@@ -87,10 +104,11 @@ class Api {
   }
 
   static insertCar(user, car) async {
-    var url = Uri.parse("${baseUrl}user/insertCar/$user/$car");
+    verify();
+    var testUrl = Uri.parse("${url}user/insertCar/$user/$car");
 
     try {
-      final res = await http.put(url);
+      final res = await http.put(testUrl);
       print(res.statusCode);
       print(url);
     } catch (e) {
@@ -99,10 +117,11 @@ class Api {
   }
 
   static deleteCar(user, car) async {
-    var url = Uri.parse("${baseUrl}user/deleteCarsById/$user/$car");
+    verify();
+    var testUrl = Uri.parse("${url}user/deleteCarsById/$user/$car");
 
     try {
-      final res = await http.put(url);
+      final res = await http.put(testUrl);
       print(res.statusCode);
       print(url);
     } catch (e) {
@@ -111,10 +130,11 @@ class Api {
   }
 
   Future<int?> login(String user, String pass) async {
-    var url = Uri.parse("${baseUrl}user/login/$user/$pass");
+    verify();
+    var testUrl = Uri.parse("${url}user/login/$user/$pass");
 
     try {
-      final res = await http.get(url);
+      final res = await http.get(testUrl);
       print(res.statusCode);
       print(url);
       return res.statusCode;
@@ -125,8 +145,9 @@ class Api {
   }
 
   static signup(String user, String pass, String email) async {
-    final url = Uri.parse("${baseUrl}user/signup/$user/$email/$pass");
-    final response = await http.post(url);
+    verify();
+    final testUrl = Uri.parse("${url}user/signup/$user/$email/$pass");
+    final response = await http.post(testUrl);
 
     try {
       if (response.statusCode == 200) {
@@ -139,10 +160,11 @@ class Api {
   }
 
   static searchCar(car) async {
-    var url = Uri.parse("${baseUrl}car/getCarsByModel/$car");
+    verify();
+    var testUrl = Uri.parse("${url}car/getCarsByModel/$car");
 
     try {
-      final res = await http.put(url);
+      final res = await http.put(testUrl);
       print(res.statusCode);
       print(url);
     } catch (e) {
@@ -151,6 +173,7 @@ class Api {
   }
 
   Future<List<Cars>> getCars() async {
+    verify();
     final res = await http.get(Uri.parse('${baseUrl}car'));
     return compute(decodeJson, res.body);
   }

@@ -79,7 +79,7 @@ class _CarsCollectionState extends State<CarsCollection> {
                                   subtitle: Text(data[index].brand),
                                   trailing: IconButton(
                                       onPressed: () async {
-                                        if (user == ' ') {
+                                        if (user == "") {
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -108,7 +108,7 @@ class _CarsCollectionState extends State<CarsCollection> {
                                                   user, data[index].id);
                                               Navigator.of(context,
                                                       rootNavigator: true)
-                                                  .pop();
+                                                  .pop(true);
                                             },
                                           );
                                         }
