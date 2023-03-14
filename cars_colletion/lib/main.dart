@@ -1,4 +1,4 @@
-import 'package:cars_colletion/home.dart';
+import 'package:cars_colletion/view/home.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());

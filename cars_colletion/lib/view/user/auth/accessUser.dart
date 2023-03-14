@@ -1,9 +1,9 @@
-import 'package:cars_colletion/view/user/signup.dart';
-import 'package:cars_colletion/view/user/signupOption.dart';
+import 'package:cars_colletion/view/user/auth/singUp/signup.dart';
+import 'package:cars_colletion/view/user/auth/singUp/signupOption.dart';
 import 'package:flutter/material.dart';
 
-import 'loginOption.dart';
-import 'login.dart';
+import 'login/loginOption.dart';
+import 'login/login.dart';
 
 class AccessUser extends StatefulWidget {
   @override

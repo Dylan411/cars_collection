@@ -1,7 +1,10 @@
 import 'package:cars_colletion/service/carAPI.dart';
-import 'package:cars_colletion/view/car/showCars.dart';
+import 'package:cars_colletion/view/user/auth/accessUser.dart';
 import 'package:flutter/material.dart';
-import 'model/cars.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../model/cars.dart';
+import 'car/global/showCars.dart';
+import 'car/user/showCarsCollection.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -11,6 +14,21 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  String user = '';
+
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  void loadData() async {
+    SharedPreferences name = await SharedPreferences.getInstance();
+    setState(() {
+      user = name.getString('user')!;
+      print('userInit:' + user);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,21 +40,30 @@ class _HomeState extends State<Home> {
           child: ListView(
             children: <Widget>[
               Container(
-                color: const Color.fromRGBO(61, 72, 92, 1.0),
+                color: Color.fromRGBO(61, 72, 92, 1.0),
                 height: 120.0,
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 18.0, left: 18.0),
+                  padding: EdgeInsets.only(right: 18.0, left: 18.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: const <Widget>[
-                            Icon(
-                              Icons.account_circle,
+                          children: <Widget>[
+                            IconButton(
+                              icon: Icon(Icons.account_circle),
+                              iconSize: 35,
                               color: Colors.white,
-                              size: 35.0,
+                              onPressed: () async {
+                                SharedPreferences name =
+                                    await SharedPreferences.getInstance();
+                                setState(() {
+                                  name.setString('user', '');
+                                  user = name.getString('user')!;
+                                  print(name);
+                                });
+                              },
                             ),
                             const SizedBox(
                               width: 10,
@@ -387,7 +414,7 @@ class _HomeState extends State<Home> {
                         scrollDirection: Axis.horizontal,
                         children: <Widget>[
                           Buildcard(
-                              'https://s3.amazonaws.com/peoplepng/wp-content/uploads/2018/07/11121827/Ferrari-PNG-Download-Image-1024x463.png',
+                              'https://www.pngarts.com/files/1/Porsche-PNG-Pic.png',
                               '17 Ford GT (2nd Color)',
                               ''),
                           const SizedBox(
@@ -401,7 +428,7 @@ class _HomeState extends State<Home> {
                             width: 20.0,
                           ),
                           Buildcard(
-                              'http://www.pngpix.com/wp-content/uploads/2016/06/PNGPIX-COM-Maserati-GranTurismo-Car-PNG-image.png',
+                              'https://www.pngarts.com/files/1/Porsche-PNG-Pic.png',
                               'Walmart Edition',
                               ''),
                         ],
@@ -415,7 +442,16 @@ class _HomeState extends State<Home> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // Add your onPressed code here!
+            print(user);
+            if (user != '') {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) => const ShowCarsCollection())));
+            } else {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: ((context) => AccessUser())));
+            }
           },
           backgroundColor: Color.fromARGB(255, 28, 35, 51),
           child: const Icon(Icons.car_repair),
@@ -427,8 +463,8 @@ class _HomeState extends State<Home> {
 
 Widget Buildcard(String url, String name, String year) {
   return Container(
-    height: 260.0,
-    width: 170.0,
+    height: 300,
+    width: 170,
     decoration: const BoxDecoration(
       color: Color.fromRGBO(61, 72, 92, 1.0),
       borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -439,48 +475,50 @@ Widget Buildcard(String url, String name, String year) {
         ),
       ],
     ),
-    child: Column(
+    child: Stack(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(left: 18.0, top: 18.0, right: 18.0),
+          padding: const EdgeInsets.only(left: 15.0, top: 15.0, right: 15.0),
           child: Image.network(url),
         ),
-        Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Flexible(
-                    child: Text(
-                      name,
-                      style: const TextStyle(
-                          color: Color.fromRGBO(28, 33, 46, 1.0),
-                          fontSize: 15.0,
-                          letterSpacing: 1.0),
-                      textAlign: TextAlign.center,
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              Row(
-                children: <Widget>[
-                  Text(
-                    " $year",
-                    style: const TextStyle(color: Colors.white, fontSize: 20.0),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 7.0,
-              ),
-            ],
+        Positioned(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15.0, top: 215.0, right: 15.0),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        name,
+                        style: const TextStyle(
+                            color: Color.fromRGBO(28, 33, 46, 1.0),
+                            fontSize: 15.0,
+                            letterSpacing: 1.0),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
+        Positioned(
+            bottom: 1,
+            right: 1,
+            child: Padding(
+              padding: EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.add, color: Colors.grey[350]?.withOpacity(0.3))
+                    ],
+                  )
+                ],
+              ),
+            ))
       ],
     ),
   );

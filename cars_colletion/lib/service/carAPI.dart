@@ -24,7 +24,7 @@ class Api {
     verify();
     List<Cars> listCars = [];
 
-    var testUrl = Uri.parse("${url}car");
+    var testUrl = Uri.parse("${baseUrl}car");
     print(url);
     try {
       final res = await http.get(testUrl);
@@ -129,8 +129,35 @@ class Api {
     }
   }
 
+  Future<int?> verifyCode(String code, String email) async {
+    var testUrl = Uri.parse("${url}user/verifyCode/$email/$code");
+
+    try {
+      final res = await http.put(testUrl);
+      print(res.statusCode);
+      print(url);
+      return res.statusCode;
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
+  Future<int?> changePassword(String email, String pass) async {
+    var testUrl = Uri.parse("${url}user/changePassword/$email/$pass");
+
+    try {
+      final res = await http.put(testUrl);
+      print(res.statusCode);
+      print(url);
+      return res.statusCode;
+    } catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
   Future<int?> login(String user, String pass) async {
-    verify();
     var testUrl = Uri.parse("${url}user/login/$user/$pass");
 
     try {
@@ -147,6 +174,21 @@ class Api {
   static signup(String user, String pass, String email) async {
     verify();
     final testUrl = Uri.parse("${url}user/signup/$user/$email/$pass");
+    final response = await http.post(testUrl);
+
+    try {
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        return (jsonResponse);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  static sendEmail(String email) async {
+    verify();
+    final testUrl = Uri.parse("${url}user/sendEmail/$email");
     final response = await http.post(testUrl);
 
     try {

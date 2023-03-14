@@ -45,6 +45,8 @@ dependencies:
   image_picker: ^0.8.6+1
   path_provider: ^2.0.12
   google_fonts: ^4.0.3
+  toast: ^0.3.0
+  slide_popup_dialog: ^0.0.2
 
 dev_dependencies:
   flutter_test:

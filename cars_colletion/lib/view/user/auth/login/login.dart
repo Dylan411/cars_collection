@@ -1,6 +1,9 @@
 import 'package:cars_colletion/service/carAPI.dart';
+import 'package:cars_colletion/view/home.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../passwordReset/resetPassword.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -143,8 +146,9 @@ class _LoginState extends State<Login> {
                 setState(() {
                   user.setString('user', nameController.text);
                   password.setString('password', passwordController.text);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: ((context) => const Home())));
                 });
-                Navigator.pop(context);
               }
             },
             child: const Text(
@@ -160,15 +164,21 @@ class _LoginState extends State<Login> {
         const SizedBox(
           height: 16,
         ),
-        const Text(
-          "FORGOT PASSWORD?",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF1C1C1C),
-            height: 1,
+        TextButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: ((context) => ResetPassword())));
+          },
+          child: Text(
+            "FORGOT PASSWORD?",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF1C1C1C),
+              height: 1,
+            ),
           ),
-        ),
+        )
       ],
     );
   }
